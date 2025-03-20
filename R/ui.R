@@ -44,6 +44,8 @@ ui <- navbarPage(
                                min = 1, 
                                max = 50, 
                                value = 30),
+                   textInput(inputId = "title1",
+                             label = "Title of the plot"),
                    colourInput(inputId = "color1",
                                label = "Choose color:",
                                value = "#FFC0CB"),
@@ -73,7 +75,9 @@ ui <- navbarPage(
                    radioButtons(inputId = "cat_plot_type", 
                                 label = "Choose plot type:",
                                 choices = c("Pie Chart"),
-                                selected = "Pie Chart")
+                                selected = "Pie Chart"),
+                   textInput(inputId = "title_cat",
+                             label = "Title of the plot")
                 ), # End wellPanel
                ), # End column
                column(8,
@@ -91,21 +95,23 @@ ui <- navbarPage(
                selectInput(inputId = "x_var",
                            label =  "X-axis variable:",
                            choices = NULL,
-                           selected = "Glucose"), # End input 1
+                           selected = "Glucose"),
                selectInput(inputId = "y_var",
                            label =  "Y-axis variable:",
                            choices = NULL,
-                           selected = "BMI"), # End input 2
+                           selected = "BMI"),
                colourInput(inputId = "color2",
                            label = "Choose color:",
-                           value = "#FFC0CB"), # End color 2
+                           value = "#FFC0CB"),
                radioButtons(inputId = "plot_type2",
                             label = "Choose plot type:",
                             choices = c("Scatterplot", "Scatterplot with Boxplots", "Violinplot", "Line Chart"),
-                            selected = "Scatterplot"), # End of radio button
+                            selected = "Scatterplot"),
                checkboxInput(inputId = "show_regression",
                              label = "Show regression line on scatterplots",
-                             value = TRUE)
+                             value = TRUE),
+               textInput(inputId = "title2",
+                         label = "Title of the plot")
              ), # End sidebarPanel
              
              mainPanel(
@@ -128,22 +134,24 @@ ui <- navbarPage(
                selectInput(inputId = "x_multi", 
                            label = "X-axis:", 
                            choices = NULL, 
-                           selected = "Age"), # End input 1
+                           selected = "Age"),
                selectInput(inputId = "y_multi", 
                            label = "Y-axis:",
                            choices = NULL, 
-                           selected = "Pregnancies"), # End input 2
+                           selected = "Pregnancies"),
                selectInput(inputId = "third_var", 
                            label =  "Third variable:", 
                            choices = NULL, 
-                           selected = "Insulin"), # End input 3
+                           selected = "Insulin"),
                colourInput(inputId = "color3",
                            label = "Choose bubble color:",
-                           value = "#FFC0CB"), # End color 3
+                           value = "#FFC0CB"),
                radioButtons(inputId = "plot_type3",
                             label = "Choose plot type:",
-                            choices = c("Bubble Chart", "Heatmap"),
-                            selected = "Bubble Chart") # End radio button
+                            choices = c("Bubble Chart", "Heatmap", "Correlation Plot"),
+                            selected = "Bubble Chart"),
+               textInput(inputId = "title3",
+                         label = "Title of the plot")
              ), # End sidebarPanel
              mainPanel(
                h3("Visualizing multiple variables"),

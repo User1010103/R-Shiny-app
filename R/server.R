@@ -91,7 +91,7 @@ server <- function(input,output, session){
       plotData1 +
         geom_histogram(bins = input$bins , fill = input$color1 , color = "black") +
         theme_bw() +
-        ggtitle(paste0("Histogram of ", input$single_var_num)) +
+        ggtitle(input$title1) +
         theme(plot.title=element_text(hjust=0.5, face = "bold"), 
               panel.grid.major = element_blank(), 
               panel.grid.minor = element_blank())
@@ -99,13 +99,13 @@ server <- function(input,output, session){
       plotData1 +
         geom_boxplot(fill = input$color1, color = "black") +
         theme_bw() +
-        ggtitle(paste0("Boxplot of ", input$single_var_num)) +
+        ggtitle(inpu$title1) +
         theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
         coord_flip()
     } else if (input$num_plot_type == "Density Plot") {
       plotData1 +
         geom_density(fill = input$color1, alpha = 0.5) +
-        ggtitle(paste0("Density plot of ", input$single_var_num)) +
+        ggtitle(inpu$title1) +
         theme_bw() +
         theme(plot.title = element_text(hjust=0.5, face = "bold"), 
               panel.grid.major = element_blank(), 
@@ -117,7 +117,7 @@ server <- function(input,output, session){
     if (input$cat_plot_type == "Pie Chart"){
       slices <- table(data()[[input$single_var_cat]])
       pie(slices,
-          main = paste0("Pie Chart of ", input$single_var_cat),
+          main = input$title_cat,
           col = rainbow(length(slices))
       )
     } # End if-loop
@@ -128,7 +128,7 @@ server <- function(input,output, session){
     if (input$plot_type2 == "Scatterplot") {
       scatplot <- plotData2 +
         geom_point(color = input$color2, alpha = 0.6) +
-        ggtitle(paste0("Scatterplot of ", input$x_var, "vs. ", input$y_var)) +
+        ggtitle(input$title2) +
         theme_bw() + 
         theme(plot.title=element_text(hjust=0.5, face = "bold"))
       
@@ -141,7 +141,7 @@ server <- function(input,output, session){
       # Scatterplot
       scatter_plot <- plotData2 +
         geom_point(color = input$color2, alpha = 0.6) +
-        ggtitle(paste0("Scatterplot of ", input$x_var, " vs. ", input$y_var)) +
+        ggtitle(input$title2) +
         theme_bw() + 
         theme(plot.title = element_text(hjust = 0.5, face = "bold"))
       
@@ -173,12 +173,13 @@ server <- function(input,output, session){
     } else if (input$plot_type2 == "Violinplot"){
       plotData2 +
         geom_violin(fill = input$color2, color="black") +
-        ggtitle(paste0("Violinplot of ", input$x_var, " vs. ", input$y_var)) +
+        ggtitle(input$title2) +
         theme_bw() + 
         theme(plot.title=element_text(hjust=0.5, face = "bold"))
     } else if (input$plot_type2 == "Line Chart") {
       plotData2 +
         geom_line(color = input$color2, size = 1) +
+        ggtitle(input$title2) +
         theme_bw() +
         theme(plot.title=element_text(hjust=0.5, face = "bold"))
     }# End if-loop
@@ -188,15 +189,36 @@ server <- function(input,output, session){
     if (input$plot_type3 == "Bubble Chart"){
       ggplot(data = data(), mapping = aes_string(x = input$x_multi, y = input$y_multi, size = input$third_var)) +
         geom_point(color = input$color3) +
-        ggtitle(paste0("Bubble chart of ", input$x_multi, " vs. ", input$y_multi, " with bubble size of ", input$third_var)) +
+        ggtitle(input$title3) +
         theme_bw() +
         theme(plot.title=element_text(hjust=0.5, face = "bold"))
     } else if (input$plot_type3 == "Heatmap") {
       ggplot(data = data(), mapping = aes_string(x = input$x_multi, y = input$y_multi, fill = input$third_var)) + 
         geom_tile() +
-        ggtitle(paste0("Heatmap: Relationship Between ", input$x_multi, " and ", input$y_multi, " with ", input$third_var)) +
+        scale_fill_gradient(low = "white", high = input$color3) +
+        ggtitle(input$title3) +
         theme_bw() +
         theme(plot.title=element_text(hjust=0.5, face = "bold"))
-    } # End if-loop
+    } else if (input$plot_type3 == "Correlation Plot") {
+      # Get numerical data
+      num_data <- numerical()
+      # Remove NaN values
+      num_data_complete <- na.omit(num_data)
+      # Show message if there was data removed
+      if (nrow(num_data_complete) < nrow(num_data)) {
+        warning("Some rows with missing (NaN) values were excluded from the correlation plot.")
+      }
+      # Create correlation plot
+      corrplot(cor(num_data_complete), 
+               method = "circle", 
+               type = "upper", 
+               order = "hclust",
+               tl.col = "black", 
+               tl.srt = 45, 
+               addCoef.col = "black",
+               col = colorRampPalette(c("white", input$color3))(100),
+               title = input$title3,
+               mar = c(0, 0, 1, 0))
+    }# End if-loop
   })# End multi_var_plot
 } # End server
