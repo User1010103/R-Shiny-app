@@ -99,13 +99,13 @@ server <- function(input,output, session){
       plotData1 +
         geom_boxplot(fill = input$color1, color = "black") +
         theme_bw() +
-        ggtitle(inpu$title1) +
+        ggtitle(input$title1) +
         theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
         coord_flip()
     } else if (input$num_plot_type == "Density Plot") {
       plotData1 +
         geom_density(fill = input$color1, alpha = 0.5) +
-        ggtitle(inpu$title1) +
+        ggtitle(input$title1) +
         theme_bw() +
         theme(plot.title = element_text(hjust=0.5, face = "bold"), 
               panel.grid.major = element_blank(), 
